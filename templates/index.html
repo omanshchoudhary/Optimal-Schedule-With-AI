@@ -2,22 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Classroom Management</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Timetable</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to Classroom Management System</h1>
-        <h2>Select Your Role</h2>
-        <form action="/role" method="post">
-            <select name="role" required>
-                <option value="">Select Role</option>
-                <option value="admin">Admin</option>
-                <option value="teacher">Teacher</option>
-                <option value="student">Student</option>
-            </select>
-            <button type="submit">Proceed</button>
-        </form>
+    <h1>Welcome to the School Timetable System</h1>
+    <div class="navigation">
+        <a href="/admin">Admin Login</a>
+        <a href="/timetable">Student Timetable</a>
     </div>
 </body>
 </html>
