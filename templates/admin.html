@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Panel</h1>
+        
+        <h2>Add Students</h2>
+        <form action="/add_student" method="post">
+            <input type="text" name="student_name" placeholder="Student Name" required>
+            <button type="submit">Add Student</button>
+        </form>
+        
+        <h2>Add Teachers</h2>
+        <form action="/add_teacher" method="post">
+            <input type="text" name="teacher_name" placeholder="Teacher Name" required>
+            <button type="submit">Add Teacher</button>
+        </form>
+        
+        <h2>Add Classrooms</h2>
+        <form action="/add_classroom" method="post">
+            <input type="text" name="classroom_name" placeholder="Classroom Name" required>
+            <button type="submit">Add Classroom</button>
+        </form>
+
+        <h2>Students:</h2>
+        <ul>
+            {% for student in students %}
+                <li>{{ student }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Teachers:</h2>
+        <ul>
+            {% for teacher in teachers %}
+                <li>{{ teacher }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Generate Schedule</h2>
+        <form action="/generate_schedule" method="post">
+            <button type="submit">Generate Schedule</button>
+        </form>
+    </div>
+</body>
+</html>

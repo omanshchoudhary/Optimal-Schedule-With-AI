@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Schedule</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ user }}'s Schedule</h1>
+        <table>
+            <tr>
+                <th>Time Slot</th>
+                <th>Classroom</th>
+            </tr>
+            {% for slot in schedule %}
+                <tr>
+                    <td>{{ slot[0] }}</td>
+                    <td>{{ slot[1] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <a href="/">Back</a>
+    </div>
+</body>
+</html>
