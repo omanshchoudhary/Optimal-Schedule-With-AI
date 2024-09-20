@@ -14,7 +14,36 @@
             <input type="text" name="student_name" placeholder="Student Name" required>
             <button type="submit">Add Student</button>
         </form>
-        
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Admin Page</h1>
+    <form method="post">
+        <h2>Add Student</h2>
+        <input type="text" name="name" placeholder="Student Name" required>
+        <button type="submit" name="action" value="Add Student">Add Student</button>
+    </form>
+    
+    <form method="post">
+        <h2>Add Teacher</h2>
+        <input type="text" name="name" placeholder="Teacher Name" required>
+        <button type="submit" name="action" value="Add Teacher">Add Teacher</button>
+    </form>
+    
+    <form method="post">
+        <h2>Add Classroom</h2>
+        <input type="text" name="name" placeholder="Classroom Name" required>
+        <button type="submit" name="action" value="Add Classroom">Add Classroom</button>
+    </form>
+</body>
+</html>
+
         <h2>Add Teachers</h2>
         <form action="/add_teacher" method="post">
             <input type="text" name="teacher_name" placeholder="Teacher Name" required>
