@@ -3,27 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Page</title>
+    <title>Admin Panel</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Admin Page</h1>
+    <h1>Admin Panel</h1>
     <form method="post">
-        <h2>Add Student</h2>
-        <input type="text" name="name" placeholder="Student Name" required>
-        <button type="submit" name="action" value="Add Student">Add Student</button>
+        <input type="text" name="name" placeholder="Enter Name" required>
+        <select name="role" required>
+            <option value="student">Student</option>
+            <option value="teacher">Teacher</option>
+            <option value="classroom">Classroom</option>
+        </select>
+        <button type="submit">Add</button>
     </form>
-    
-    <form method="post">
-        <h2>Add Teacher</h2>
-        <input type="text" name="name" placeholder="Teacher Name" required>
-        <button type="submit" name="action" value="Add Teacher">Add Teacher</button>
-    </form>
-    
-    <form method="post">
-        <h2>Add Classroom</h2>
-        <input type="text" name="name" placeholder="Classroom Name" required>
-        <button type="submit" name="action" value="Add Classroom">Add Classroom</button>
-    </form>
+    <a href="/">Back to Home</a>
 </body>
 </html>
