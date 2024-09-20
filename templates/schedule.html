@@ -2,25 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Schedule</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Timetable</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>{{ user }}'s Schedule</h1>
-        <table>
-            <tr>
-                <th>Time Slot</th>
-                <th>Classroom</th>
-            </tr>
-            {% for slot in schedule %}
-                <tr>
-                    <td>{{ slot[0] }}</td>
-                    <td>{{ slot[1] }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-        <a href="/">Back</a>
-    </div>
+    <h1>Student Timetable</h1>
+    <form method="post">
+        <input type="text" name="student_name" placeholder="Enter Student Name" required>
+        <button type="submit">Get Timetable</button>
+    </form>
+    
+    {% if timetable %}
+    <table>
+        <tr>
+            <th>Timeslot</th>
+            <th>Classroom</th>
+            <th>Teacher</th>
+        </tr>
+        {% for entry in timetable %}
+        <tr>
+            <td>{{ entry.timeslot }}</td>
+            <td>{{ entry.classroom }}</td>
+            <td>{{ entry.teacher }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No timetable available. Please enter your name to view it.</p>
+    {% endif %}
 </body>
 </html>
