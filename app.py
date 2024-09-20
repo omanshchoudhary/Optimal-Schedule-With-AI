@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 import sqlite3
+import random
 
 app = Flask(__name__)
 
@@ -21,21 +22,18 @@ def admin():
         conn = get_db_connection()
         try:
             if role == 'student':
-                # Check for duplicates
                 existing_student = conn.execute('SELECT id FROM students WHERE name = ?', (name,)).fetchone()
                 if existing_student:
                     return "Student already exists!", 400
                 conn.execute('INSERT INTO students (name) VALUES (?)', (name,))
                 
             elif role == 'teacher':
-                # Check for duplicates
                 existing_teacher = conn.execute('SELECT id FROM teachers WHERE name = ?', (name,)).fetchone()
                 if existing_teacher:
                     return "Teacher already exists!", 400
                 conn.execute('INSERT INTO teachers (name) VALUES (?)', (name,))
                 
             elif role == 'classroom':
-                # Check for duplicates
                 existing_classroom = conn.execute('SELECT id FROM classrooms WHERE name = ?', (name,)).fetchone()
                 if existing_classroom:
                     return "Classroom already exists!", 400
@@ -69,30 +67,30 @@ def generate_timetable(student_id):
     timetable = []
     conn = get_db_connection()
     
-    # Check if the student exists
-    student = conn.execute('SELECT id FROM students WHERE id = ?', (student_id,)).fetchone()
-    if not student:
-        return []  # Return an empty timetable if the student doesn't exist
-
+    # Fetch all available classrooms and teachers
+    classrooms = conn.execute('SELECT id, name FROM classrooms').fetchall()
+    teachers = conn.execute('SELECT id, name FROM teachers').fetchall()
+    
     # Example time slots
     slots = ['8:30 AM - 9:30 AM', '9:30 AM - 10:30 AM', '10:30 AM - 11:30 AM', 
              '11:30 AM - 12:30 PM', '1:30 PM - 2:30 PM', '2:30 PM - 3:30 PM', 
              '3:30 PM - 4:30 PM', '4:30 PM - 5:30 PM']
     
-    for slot in slots:
-        # Example logic to fetch classroom and teacher (this can be improved)
-        classroom_id = 1  # Modify this logic for actual classroom selection
-        teacher_id = 1    # Modify this logic for actual teacher selection
-        
-        # Check if classroom and teacher exist
-        classroom = conn.execute('SELECT id FROM classrooms WHERE id = ?', (classroom_id,)).fetchone()
-        teacher = conn.execute('SELECT id FROM teachers WHERE id = ?', (teacher_id,)).fetchone()
-        
-        if classroom and teacher:
+    # Schedule students with breaks
+    for i, slot in enumerate(slots):
+        if random.random() < 0.5:  # 50% chance to skip a slot for a break
             timetable.append({
                 'slot': slot,
-                'classroom': f'Classroom {classroom_id}',  # Example classroom
-                'teacher': 'Mr. Smith'  # Example teacher
+                'classroom': 'Break',
+                'teacher': ''
+            })
+        else:
+            classroom = random.choice(classrooms)
+            teacher = random.choice(teachers)
+            timetable.append({
+                'slot': slot,
+                'classroom': classroom['name'],
+                'teacher': teacher['name']
             })
 
     conn.close()
