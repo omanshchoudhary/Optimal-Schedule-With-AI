@@ -1,100 +1,57 @@
-from flask import Flask, render_template, request, redirect
-import sqlite3
-import random
+from flask import Flask, request, jsonify
+import gemini
+from database import conn, c  # Import the connection and cursor objects from database.py
 
 app = Flask(__name__)
 
-def get_db_connection():
-    conn = sqlite3.connect('school.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+# Create a Gemini database object
+db = gemini.Database(conn)
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+# Define a function to create a new student
+def create_student(name, grade):
+    # Use Gemini to create a new student
+    student = db.table('students').insert({'name': name, 'grade': grade})
+    return student
 
-@app.route('/admin', methods=['GET', 'POST'])
-def admin():
-    if request.method == 'POST':
-        name = request.form['name']
-        role = request.form['role']  # 'student', 'teacher', or 'classroom'
-        
-        conn = get_db_connection()
-        try:
-            if role == 'student':
-                existing_student = conn.execute('SELECT id FROM students WHERE name = ?', (name,)).fetchone()
-                if existing_student:
-                    return "Student already exists!", 400
-                conn.execute('INSERT INTO students (name) VALUES (?)', (name,))
-                
-            elif role == 'teacher':
-                existing_teacher = conn.execute('SELECT id FROM teachers WHERE name = ?', (name,)).fetchone()
-                if existing_teacher:
-                    return "Teacher already exists!", 400
-                conn.execute('INSERT INTO teachers (name) VALUES (?)', (name,))
-                
-            elif role == 'classroom':
-                existing_classroom = conn.execute('SELECT id FROM classrooms WHERE name = ?', (name,)).fetchone()
-                if existing_classroom:
-                    return "Classroom already exists!", 400
-                conn.execute('INSERT INTO classrooms (name) VALUES (?)', (name,))
-                
-            conn.commit()
-        except sqlite3.IntegrityError as e:
-            return f"An error occurred: {e}", 500
-        finally:
-            conn.close()
-        return redirect('/admin')
+# Define a function to get all students
+def get_students():
+    # Use Gemini to retrieve all students
+    students = db.table('students').all()
+    return students
 
-    return render_template('admin.html')
+# Define a function to update a student's grade
+def update_student_grade(student_id, new_grade):
+    # Use Gemini to update the student's grade
+    db.table('students').update({'grade': new_grade}, {'id': student_id})
 
-@app.route('/timetable', methods=['GET', 'POST'])
-def timetable():
-    if request.method == 'POST':
-        student_name = request.form['student_name']
-        conn = get_db_connection()
-        student = conn.execute('SELECT id FROM students WHERE name = ?', (student_name,)).fetchone()
-        
-        if student:
-            # Generate and return the timetable for the student
-            student_id = student['id']
-            timetable_data = generate_timetable(student_id)
-            return render_template('timetable.html', timetable=timetable_data)
-        
-    return render_template('timetable.html', timetable=None)
+# Define a function to delete a student
+def delete_student(student_id):
+    # Use Gemini to delete the student
+    db.table('students').delete({'id': student_id})
 
-def generate_timetable(student_id):
-    timetable = []
-    conn = get_db_connection()
-    
-    # Fetch all available classrooms and teachers
-    classrooms = conn.execute('SELECT id, name FROM classrooms').fetchall()
-    teachers = conn.execute('SELECT id, name FROM teachers').fetchall()
-    
-    # Example time slots
-    slots = ['8:30 AM - 9:30 AM', '9:30 AM - 10:30 AM', '10:30 AM - 11:30 AM', 
-             '11:30 AM - 12:30 PM', '1:30 PM - 2:30 PM', '2:30 PM - 3:30 PM', 
-             '3:30 PM - 4:30 PM', '4:30 PM - 5:30 PM']
-    
-    # Schedule students with breaks
-    for i, slot in enumerate(slots):
-        if random.random() < 0.5:  # 50% chance to skip a slot for a break
-            timetable.append({
-                'slot': slot,
-                'classroom': 'Break',
-                'teacher': ''
-            })
-        else:
-            classroom = random.choice(classrooms)
-            teacher = random.choice(teachers)
-            timetable.append({
-                'slot': slot,
-                'classroom': classroom['name'],
-                'teacher': teacher['name']
-            })
+# Define Flask routes for CRUD operations
+@app.route('/students', methods=['POST'])
+def create_student_route():
+    name = request.json['name']
+    grade = request.json['grade']
+    student = create_student(name, grade)
+    return jsonify({'id': student.id, 'name': student.name, 'grade': student.grade})
 
-    conn.close()
-    return timetable
+@app.route('/students', methods=['GET'])
+def get_students_route():
+    students = get_students()
+    return jsonify([{'id': student.id, 'name': student.name, 'grade': student.grade} for student in students])
+
+@app.route('/students/<int:student_id>', methods=['PATCH'])
+def update_student_grade_route(student_id):
+    new_grade = request.json['grade']
+    update_student_grade(student_id, new_grade)
+    return jsonify({'message': 'Student grade updated successfully'})
+
+@app.route('/students/<int:student_id>', methods=['DELETE'])
+def delete_student_route(student_id):
+    delete_student(student_id)
+    return jsonify({'message': 'Student deleted successfully'})
 
 if __name__ == '__main__':
     app.run(debug=True)
