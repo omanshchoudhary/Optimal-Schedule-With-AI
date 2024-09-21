@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="max-w-md mx-auto">
+    <h2 class="text-3xl font-bold text-center mb-6 text-blue-900">Register</h2>
+    <form action="{{ url_for('register') }}" method="post" class="space-y-4">
+        <div>
+            <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+            <input type="text" id="username" name="username" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div>
+            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+            <input type="password" id="password" name="password" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700">User Type</label>
+            <div class="mt-2 space-x-4">
+                <label class="inline-flex items-center">
+                    <input type="radio" name="user_type" value="student" checked class="form-radio text-blue-600">
+                    <span class="ml-2">Student</span>
+                </label>
+                <label class="inline-flex items-center">
+                    <input type="radio" name="user_type" value="admin" class="form-radio text-blue-600">
+                    <span class="ml-2">Admin</span>
+                </label>
+            </div>
+        </div>
+        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Register
+        </button>
+    </form>
+    <p class="mt-4 text-center text-sm text-gray-600">
+        Already have an account? <a href="{{ url_for('login') }}" class="text-blue-600 hover:text-blue-800">Login here</a>
+    </p>
+</div>
+{% endblock %}
