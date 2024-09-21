@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="text-3xl font-bold text-center mb-6 text-blue-900">
+    {% if is_admin %}Admin Dashboard{% else %}Student Dashboard{% endif %}
+</h2>
+{% if is_admin %}
+<div id="admin-panel" class="space-y-4">
+    <form id="add-data-form" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+            <label for="data-type" class="block text-sm font-medium text-gray-700">Data Type</label>
+            <select id="data-type" name="type" required class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                <option value="class">Class</option>
+                <option value="faculty">Faculty</option>
+                <option value="venue">Venue</option>
+            </select>
+        </div>
+        <div>
+            <label for="data-name" class="block text-sm font-medium text-gray-700">Name</label>
+            <input type="text" id="data-name" name="name" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+        </div>
+        <div class="flex items-end">
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Add Data
+            </button>
+        </div>
+    </form>
+    <button id="generate-schedule" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+        Generate Schedule
+    </button>
+</div>
+{% else %}
+<div id="student-panel" class="space-y-4">
+    <form id="get-timetable-form">
+        <div>
+            <label for="class-id" class="block text-sm font-medium text-gray-700">Class ID</label>
+            <input type="text" id="class-id" name="class_id" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+        </div>
+        <button type="submit" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Get Timetable
+        </button>
+    </form>
+</div>
+{% endif %}
+<div id="schedule-display" class="mt-8"></div>
+{% endblock %}
