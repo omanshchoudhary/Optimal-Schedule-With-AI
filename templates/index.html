@@ -1,17 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Timetable</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>Welcome to the School Timetable System</h1>
-    <a href="/admin">Admin Login</a>
-    <form action="/timetable" method="post">
-        <input type="text" name="student_name" placeholder="Enter Student Name" required>
-        <button type="submit">Get Timetable</button>
-    </form>
-</body>
-</html>
+{% extends "layout.html" %}
+{% block content %}
+<h1 class="text-4xl font-bold mb-8 text-center text-blue-900">Welcome to VIT Class Vellore Scheduling System</h1>
+<div class="flex justify-center space-x-4">
+    <a href="{{ url_for('login') }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Login</a>
+    <a href="{{ url_for('register') }}" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Register</a>
+</div>
+{% endblock %}
